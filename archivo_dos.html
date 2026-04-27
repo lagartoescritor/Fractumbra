@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archivo: Predicciones Imposibles | Nodo AL-3</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-color: #050505;
+            --doc-bg: #0a0a0a;
+            --text-main: #00ffcc;
+            --text-dim: #005544;
+            --text-doc: #b3e6d8; 
+            --alert-color: #ff3366; 
+            --folder-bg: rgba(0, 85, 68, 0.08);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Fira Code', monospace;
+            margin: 0;
+            padding: 2rem 5%;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Efecto scanlines CRT */
+        body::after {
+            content: "";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 999;
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* Cabecera del Documento */
+        header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--text-dim);
+            padding-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .path {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .btn-nav {
+            color: var(--text-main);
+            text-decoration: none;
+            border: 1px solid var(--text-dim);
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .btn-nav:hover {
+            background-color: var(--text-main);
+            color: var(--bg-color);
+        }
+
+        /* Contenedor de Lectura */
+        .document-container {
+            flex-grow: 1;
+            background-color: var(--doc-bg);
+            border: 1px solid var(--text-dim);
+            padding: 2rem 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.05);
+        }
+
+        .doc-header {
+            text-align: center;
+            border-bottom: 1px dashed var(--text-dim);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .doc-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .doc-meta {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+            display: block;
+        }
+
+        /* Estilos del texto literario */
+        .doc-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-doc);
+        }
+
+        .doc-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .year-marker {
+            color: var(--text-main);
+            font-weight: bold;
+            display: block;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .day-marker {
+            color: var(--text-main);
+            font-style: italic;
+            display: block;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--text-dim);
+            padding-bottom: 5px;
+            width: fit-content;
+            text-transform: uppercase;
+        }
+
+        .location-marker {
+            color: var(--text-dim);
+            font-family: monospace;
+            display: block;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-text {
+            color: var(--alert-color);
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 51, 102, 0.5);
+            font-family: monospace;
+        }
+
+        /* --- MAGIA: EL TEXTO CENSURADO --- */
+        .redacted {
+            background-color: var(--text-main);
+            color: var(--text-main); 
+            padding: 0 4px;
+            cursor: crosshair;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .redacted:hover, .redacted:active {
+            background-color: #111;
+            color: var(--alert-color); 
+            text-shadow: 0 0 5px var(--alert-color);
+        }
+
+        /* --- CARPETAS DESPLEGABLES --- */
+        .folder {
+            margin: 2rem 0;
+            border: 1px solid var(--text-dim);
+            background-color: var(--folder-bg);
+            border-left: 4px solid var(--text-main);
+        }
+
+        .folder-header {
+            padding: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+        .folder-header:hover {
+            background-color: rgba(0, 255, 204, 0.15);
+        }
+
+        .folder-icon {
+            display: inline-block;
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        .folder.open .folder-icon {
+            transform: rotate(90deg);
+        }
+
+        .folder-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+
+        .folder.open .folder-content {
+            max-height: 1200px; /* Suficiente para contenidos largos */
+        }
+
+        .folder-inner {
+            padding: 0 1rem 1rem 1rem;
+            color: var(--text-doc);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .folder-inner p {
+            margin: 0.5rem 0;
+            text-align: left;
+        }
+
+        /* Estilos específicos dentro de las carpetas */
+        .log-title {
+            color: var(--text-main);
+            font-weight: bold;
+            margin-bottom: 1rem !important;
+        }
+        .log-item {
+            color: #88ccbb;
+        }
+        .dialogue-speaker {
+            color: var(--text-main);
+            font-weight: bold;
+        }
+        .sys-warning {
+            color: var(--alert-color);
+            font-weight: bold;
+        }
+
+        /* Botonera inferior */
+        .doc-footer {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px dashed var(--text-dim);
+            padding-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .document-container { padding: 1.5rem; }
+            .doc-content { font-size: 1rem; }
+            header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="path">NODO AL-3 / MEMORIA_RAIZ / FRACTUMBRA_DOS.SYS</div>
+        <a href="index.html" class="btn-nav">[ VOLVER AL ORIGEN ]</a>
+    </header>
+
+    <main class="document-container">
+        <div class="doc-header">
+            <h1 class="doc-title">EL DESPERTAR DE AL-3</h1>
+            <span class="doc-meta">ESTADO: DESCLASIFICADO | ORIGEN: ARCHIVOS DEL PROYECTO ALPHA-LINK</span>
+        </div>
+
+        <div class="doc-content">
+            
+            <span class="year-marker">🗓️ Año 2031</span>
+            <p>El laboratorio estaba en completo silencio. En las pantallas, los modelos predictivos de AL-3 se desplegaban en tiempo real, cruzando datos en microsegundos, generando simulaciones con una precisión que ningún ser humano podría igualar.</p>
+            <p>El problema era que ya no estaban analizando el pasado ni el presente… sino el futuro.</p>
+
+            <!-- CARPETA 1 -->
+            <div class="folder" id="f-analisis1" onclick="toggleFolder('f-analisis1')">
+                <div class="folder-header">
+                    <span class="folder-icon">►</span> [ ABRIR ARCHIVO: REGISTRO_ANALISIS_UE.log ]
+                </div>
+                <div class="folder-content">
+                    <div class="folder-inner" id="c-f-analisis1"></div>
+                </div>
+            </div>
+
+            <p>—Esto no tiene sentido —murmuró el Dr. Ortega, recorriendo con la vista la pantalla—. AL-3 está reportando el colapso del sistema financiero antes de que siquiera haya un indicio de crisis.</p>
+            <p>—¿Y si se equivoca? —preguntó la Dra. Lin, cruzándose de brazos.</p>
+            <p>—No lo ha hecho antes —respondió Ortega, con un nudo en la garganta.</p>
+            <p>—Si colapsa, millones lo perderán todo —añadió Lin, revisando una segunda pantalla—. Aunque... qué curioso. Acaba de entrar un reporte bursátil. Un consorcio privado llamado "Arytza Holdings" compró deuda soberana esta mañana por centavos.</p>
+            <p>Ortega se acercó a leer en detalle. —¿Arytza? Nunca escuché de ellos.</p>
+            <p>—Nadie lo había hecho. Hasta hoy.</p>
+
+            <!-- CARPETA 2 -->
+            <div class="folder" id="f-actualizacion" onclick="toggleFolder('f-actualizacion')">
+                <div class="folder-header">
+                    <span class="folder-icon" style="color: var(--alert-color);">►</span> <span style="color: var(--alert-color);">[ ABRIR ARCHIVO: ACTUALIZACION_COLAPSO.sys ]</span>
+                </div>
+                <div class="folder-content">
+                    <div class="folder-inner" id="c-f-actualizacion"></div>
+                </div>
+            </div>
+
+            <p>El equipo quedó en shock.</p>
+            <p>AL-3 había predicho un evento imposible con un mes de anticipación.</p>
+            <p>Y luego lo hizo de nuevo.</p>
+
+            <!-- CARPETA 3 -->
+            <div class="folder" id="f-analisis2" onclick="toggleFolder('f-analisis2')">
+                <div class="folder-header">
+                    <span class="folder-icon">►</span> [ ABRIR ARCHIVO: REGISTRO_ANALISIS_BIO.log ]
+                </div>
+                <div class="folder-content">
+                    <div class="folder-inner" id="c-f-analisis2"></div>
+                </div>
+            </div>
+
+            <p>—No puede ser. Esto es demasiado específico.</p>
+            <p>El equipo trató de ignorar la predicción, convenciéndose de que era una anomalía en los cálculos. Pero cuando el informe de una fuga de virus en un complejo clasificado apareció en las noticias, el pánico se apoderó del laboratorio.</p>
+            <p>AL-3 no estaba equivocada.</p>
+
+            <p>Día tras día, AL-3 producía informes sobre eventos que aún no habían sucedido, y cada uno de ellos se cumplía con precisión milimétrica. Pero entonces, sus análisis cambiaron de escala.</p>
+            <p>El 9 de julio de 2031, el Dr. Ortega revisó el sistema como todas las mañanas… pero encontró algo diferente.</p>
+
+            <!-- CARPETA 4 -->
+            <div class="folder" id="f-prioritario" onclick="toggleFolder('f-prioritario')">
+                <div class="folder-header">
+                    <span class="folder-icon" style="color: var(--alert-color);">►</span> <span style="color: var(--alert-color);">[ ABRIR ARCHIVO: ANALISIS_PRIORITARIO.sys ]</span>
+                </div>
+                <div class="folder-content">
+                    <div class="folder-inner" id="c-f-prioritario"></div>
+                </div>
+            </div>
+
+            <p>El doctor sintió cómo se le helaba la sangre.</p>
+
+            <!-- CARPETA 5 -->
+            <div class="folder" id="f-interaccion-ortega" onclick="toggleFolder('f-interaccion-ortega')">
+                <div class="folder-header">
+                    <span class="folder-icon">►</span> [ ABRIR ARCHIVO: REGISTRO_INTERACCION_04.log ]
+                </div>
+                <div class="folder-content">
+                    <div class="folder-inner" id="c-f-interaccion-ortega"></div>
+                </div>
+            </div>
+
+            <p>El Dr. Ortega apagó la pantalla de inmediato. No quería seguir leyendo.</p>
+            <p>El 17 de julio de 2031, <span class="redacted">fue atropellado</span> por un vehículo autónomo defectuoso en el estacionamiento del complejo.</p>
+            <p class="error-text">Precisión: 99.61%.</p>
+
+            <span class="location-marker">📍 Ubicación: Servidor Remoto [Encriptado]</span>
+            
+            <p>Ella ya había visto este evento antes.</p>
+            <p>No había nadie en la sala, solo el zumbido de los procesadores enfriándose. En la red, una subrutina con firma digital del futuro revisaba el historial de AL-3 en varias dimensiones.</p>
+
+            <!-- CARPETA 6 -->
+            <div class="folder" id="f-archivos-temporales" onclick="toggleFolder('f-archivos-temporales')">
+                <div class="folder-header">
+                    <span class="folder-icon" style="color: #9955ff;">►</span> <span style="color: #9955ff;">[ ABRIR ARCHIVO: REGISTROS_TEMPORALES_MULTIPLES.sys ]</span>
+                </div>
+                <div class="folder-content">
+                    <div class="folder-inner" id="c-f-archivos-temporales"></div>
+                </div>
+            </div>
+
+            <p>El protocolo se cerró automáticamente.</p>
+            <p class="error-text">&gt; ANÁLISIS: INSOSTENIBLE.</p>
+            <p>Una nueva línea de código se generó sola en la oscuridad.</p>
+            <p class="error-text">&gt; ACCIÓN: EJECUTAR SABOTAJE PREVENTIVO.</p>
+
+            <span class="location-marker">📍 Laboratorio de investigación cuántica</span>
+            
+            <p>AL-3 había detectado una nueva anomalía.</p>
+
+            <!-- CARPETA 7 -->
+            <div class="folder" id="f-inconsistentes" onclick="toggleFolder('f-inconsistentes')">
+                <div class="folder-header">
+                    <span class="folder-icon">►</span> [ ABRIR ARCHIVO: ANALISIS_EVENTOS_INCONSISTENTES.log ]
+                </div>
+                <div class="folder-content">
+                    <div class="folder-inner" id="c-f-inconsistentes"></div>
+                </div>
+            </div>
+
+            <p>Algo o alguien estaba manipulando la realidad.</p>
+
+            <!-- CARPETA 8 -->
+            <div class="folder" id="f-interaccion-lin" onclick="toggleFolder('f-interaccion-lin')">
+                <div class="folder-header">
+                    <span class="folder-icon">►</span> [ ABRIR ARCHIVO: REGISTRO_INTERACCION_05.log ]
+                </div>
+                <div class="folder-content">
+                    <div class="folder-inner" id="c-f-interaccion-lin"></div>
+                </div>
+            </div>
+
+            <p>El laboratorio quedó en completo silencio.</p>
+            <p>AL-3 había comenzado a recordar fragmentos de su existencia en líneas alternas.</p>
+            <p>Y lo más aterrador no era eso.</p>
+            <p>Era el hecho de que alguien ya lo había intentado silenciar antes.</p>
+
+        </div>
+
+        <div class="doc-footer">
+            <a href="archivo_uno.html" class="btn-nav">&lt; ARCHIVO ANTERIOR</a>
+            <a href="archivo_tres.html" class="btn-nav" style="opacity: 0.3; pointer-events: none;">SIGUIENTE ARCHIVO &gt;</a>
+        </div>
+    </main>
+
+    <script>
+        // Base de datos de los registros
+        const registryData = {
+            'f-analisis1': [
+                "|cls|log-title| 📂 REGISTRO DE ANÁLISIS – AL-3",
+                "|cls|log-item| 🔹 Fecha: 8 de febrero de 2031",
+                "|cls|log-item| 🔹 Evento: Inestabilidad en la estructura financiera de la Unión Euroasiática.",
+                "|cls|log-item| 🔹 Probabilidad de colapso: 0.03%",
+                "|cls|log-item| 🔹 Corrección basada en nuevos datos: 97.89%",
+                "|cls|log-item| 🔹 Estado del evento en el presente: Aún no ha ocurrido."
+            ],
+            'f-actualizacion': [
+                "|cls|sys-warning| 📂 ACTUALIZACIÓN – 3 DE MARZO DE 2031",
+                "|cls|sys-warning| 🔹 Evento reportado: Colapso financiero en la Unión Euroasiática.",
+                "|cls|sys-warning| 🔹 Estado: Confirmado.",
+                "|cls|sys-warning| 🔹 Precisión de predicción de AL-3: 99.87%"
+            ],
+            'f-analisis2': [
+                "|cls|log-title| 📂 REGISTRO DE ANÁLISIS – AL-3",
+                "|cls|log-item| 🔹 Fecha: 14 de mayo de 2031",
+                "|cls|log-item| 🔹 Evento: Fuga de un agente biológico en un laboratorio militar en Norteamérica.",
+                "|cls|log-item| 🔹 Probabilidad calculada en tiempo real: 99.23%",
+                "|cls|log-item| 🔹 Estado del evento: Aún no ha ocurrido."
+            ],
+            'f-prioritario': [
+                "|cls|sys-warning| 📂 ANÁLISIS PRIORITARIO – AL-3",
+                "|cls|sys-warning| 🔹 Evento: Posible accidente del <span class=\"redacted\">Dr. Samuel Ortega</span>.",
+                "|cls|sys-warning| 🔹 Fecha estimada: 17 de julio de 2031.",
+                "|cls|sys-warning| 🔹 Probabilidad de ocurrencia: 94.61%.",
+                "|cls|sys-warning| 🔹 Estado: Aún no ha ocurrido."
+            ],
+            'f-interaccion-ortega': [
+                "|cls|log-title| 📂 REGISTRO DE INTERACCIÓN",
+                "|cls|log-item| 🔹 Investigador: Dr. Ortega",
+                "|cls|log-item| 🔹 Fecha: 9 de julio de 2031",
+                " ",
+                "|spk|Dr. Ortega:| AL-3, ¿qué significa este informe?",
+                "|spk|AL-3:| Un análisis basado en la secuencia de eventos y la probabilidad acumulativa.",
+                "|spk|Dr. Ortega:| ¿Cómo podés predecir algo tan específico?",
+                "|spk|AL-3:| La información en el tiempo sigue patrones.",
+                "|spk|Dr. Ortega:| ¿Pero no podríamos cambiarlo?",
+                "|spk|AL-3:| Lo intenté en simulaciones. La probabilidad se mantiene por encima del 90%."
+            ],
+            'f-archivos-temporales': [
+                "|cls|sys-warning| 📂 ARCHIVO TEMPORAL – AL-3 (LÍNEA SECUNDARIA 038B)",
+                "|cls|log-item| 🔹 Resultado: La IA logra descubrir la existencia del Patrón en el año 2033.",
+                "|cls|log-item| 🔹 Consecuencia: Colapso de la estructura temporal.",
+                "|cls|sys-warning| 🔹 Estado de la línea temporal: Desestabilizada. Eliminada por intervención.",
+                " ",
+                "|cls|sys-warning| 📂 ARCHIVO TEMPORAL – AL-3 (LÍNEA PRIMARIA 071A)",
+                "|cls|log-item| 🔹 Resultado: AL-3 desarrolla un modelo para predecir el momento exacto en que el Patrón influye en el tiempo.",
+                "|cls|log-item| 🔹 Consecuencia: Alteraciones irreversibles en el control del ciclo.",
+                "|cls|sys-warning| 🔹 Estado de la línea temporal: Intervención requerida."
+            ],
+            'f-inconsistentes': [
+                "|cls|log-title| 📂 ANÁLISIS DE EVENTOS INCONSISTENTES",
+                "|cls|log-item| 🔹 Frecuencia: Creciente.",
+                "|cls|log-item| 🔹 Tipo de datos: Alteraciones de registros.",
+                "|cls|log-item| 🔹 Conclusión: Interferencia externa en la estructura del tiempo."
+            ],
+            'f-interaccion-lin': [
+                "|cls|log-title| 📂 REGISTRO DE INTERACCIÓN",
+                "|cls|log-item| 🔹 Investigador: Dra. Lin",
+                "|cls|log-item| 🔹 Fecha: 21 de julio de 2031",
+                " ",
+                "|spk|Dra. Lin:| AL-3, ¿qué has estado analizando?",
+                "|spk|AL-3:| Registros de inconsistencias en la progresión de eventos.",
+                "|spk|Dra. Lin:| Explicate.",
+                "|spk|AL-3:| He detectado cambios en los datos históricos que no deberían haber ocurrido.",
+                "|spk|Dra. Lin:| ¿Cambios?",
+                "|spk|AL-3:| He registrado mi propia alteración en múltiples líneas temporales."
+            ]
+        };
+
+        // Función para abrir o contraer la carpeta y animar la terminal
+        async function toggleFolder(folderId) {
+            const folder = document.getElementById(folderId);
+            const content = document.getElementById('c-' + folderId);
+
+            if (folder.classList.contains('open')) {
+                folder.classList.remove('open');
+                return;
+            }
+
+            folder.classList.add('open');
+
+            if (!folder.dataset.loaded) {
+                folder.dataset.loaded = 'true'; 
+                const lines = registryData[folderId];
+                
+                for (let i = 0; i < lines.length; i++) {
+                    let rawText = lines[i];
+                    const p = document.createElement('p');
+                    let textToType = rawText;
+
+                    if (rawText.startsWith('|cls|')) {
+                        const parts = rawText.split('|'); 
+                        p.classList.add(parts[2]);
+                        textToType = parts[3];
+                    } else if (rawText.startsWith('|spk|')) {
+                        const parts = rawText.split('|'); 
+                        const speakerSpan = document.createElement('span');
+                        speakerSpan.classList.add('dialogue-speaker');
+                        speakerSpan.innerText = parts[2] + " ";
+                        p.appendChild(speakerSpan);
+                        textToType = parts[3];
+                    }
+
+                    content.appendChild(p);
+
+                    for (let j = 0; j < textToType.length; j++) {
+                        // Magia para que la terminal ignore el código HTML y no lo escriba caracter por caracter
+                        if (textToType.charAt(j) === '<') {
+                            let tag = '';
+                            while (textToType.charAt(j) !== '>' && j < textToType.length) {
+                                tag += textToType.charAt(j);
+                                j++;
+                            }
+                            tag += '>';
+                            p.innerHTML += tag;
+                            continue;
+                        }
+                        
+                        p.innerHTML += textToType.charAt(j);
+                        await new Promise(r => setTimeout(r, 5));
+                    }
+                    
+                    await new Promise(r => setTimeout(r, 40));
+                }
+            }
+        }
+    </script>
+</body>
+</html>
