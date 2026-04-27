@@ -266,7 +266,7 @@
 
     <main class="document-container">
         <div class="doc-header">
-            <h1 class="doc-title">EL DESPERTAR DE AL-3</h1>
+            <h1 class="doc-title">PREDICCIONES IMPOSIBLES</h1>
             <span class="doc-meta">ESTADO: DESCLASIFICADO | ORIGEN: ARCHIVOS DEL PROYECTO ALPHA-LINK</span>
         </div>
 
@@ -405,7 +405,7 @@
 
         <div class="doc-footer">
             <a href="archivo_uno.html" class="btn-nav">&lt; ARCHIVO ANTERIOR</a>
-            <a href="archivo_tres.html" class="btn-nav" style="opacity: 0.3; pointer-events: none;">SIGUIENTE ARCHIVO &gt;</a>
+            <a href="#" class="btn-nav" style="opacity: 0.3; pointer-events: none;">SIGUIENTE ARCHIVO &gt;</a>
         </div>
     </main>
 
@@ -519,8 +519,10 @@
 
                     content.appendChild(p);
 
+                    // Parche: Buffer de memoria para renderizar etiquetas HTML correctamente
+                    let currentLineHTML = ""; 
+                    
                     for (let j = 0; j < textToType.length; j++) {
-                        // Magia para que la terminal ignore el código HTML y no lo escriba caracter por caracter
                         if (textToType.charAt(j) === '<') {
                             let tag = '';
                             while (textToType.charAt(j) !== '>' && j < textToType.length) {
@@ -528,11 +530,13 @@
                                 j++;
                             }
                             tag += '>';
-                            p.innerHTML += tag;
+                            currentLineHTML += tag;
+                            p.innerHTML = currentLineHTML;
                             continue;
                         }
                         
-                        p.innerHTML += textToType.charAt(j);
+                        currentLineHTML += textToType.charAt(j);
+                        p.innerHTML = currentLineHTML;
                         await new Promise(r => setTimeout(r, 5));
                     }
                     
