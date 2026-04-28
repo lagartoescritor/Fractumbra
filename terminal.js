@@ -127,7 +127,7 @@ async function revealSecretFolder(btnElement, folderId, nextUrl) {
     const glitchTexts = ["[ ! ] ANOMALÍA", "INTERCEPTANDO...", "[ ACCESO DENEGADO ]", "[ ARCHIVO RECUPERADO ]"];
     for(let i = 0; i < glitchTexts.length; i++) {
         btnElement.innerText = glitchTexts[i];
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 500));
     }
 
     // 2. Revelar la carpeta oculta
