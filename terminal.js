@@ -92,7 +92,7 @@ async function runResistAnimation(p) {
 
         // Mensaje de error de Arytza
         await new Promise(r => setTimeout(r, 200));
-        p.innerHTML = prefixText + '<span class="error-text">[ ERROR: ERROR DE PERSISTENCIA ]</span>';
+        p.innerHTML = prefixText + '<span class="error-text">[ ALERTA: ERROR DE PERSISTENCIA ]</span>';
         await new Promise(r => setTimeout(r, 1200));
 
         // El mensaje de AL-3 resiste y reaparece de golpe
@@ -127,7 +127,7 @@ async function revealSecretFolder(btnElement, folderId, nextUrl) {
     const glitchTexts = ["[ ! ] ANOMALÍA", "INTERCEPTANDO...", "[ ACCESO DENEGADO ]", "[ ARCHIVO RECUPERADO ]"];
     for(let i = 0; i < glitchTexts.length; i++) {
         btnElement.innerText = glitchTexts[i];
-        await new Promise(r => setTimeout(r, 500));
+        await new Promise(r => setTimeout(r, 650));
     }
 
     // 2. Revelar la carpeta oculta
