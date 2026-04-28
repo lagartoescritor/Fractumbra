@@ -191,7 +191,8 @@ header {
     font-weight: bold;
     text-align: center;
     text-shadow: 0 0 5px rgba(255, 51, 102, 0.5);
-    animation: glitch-insert 4s infinite;
+    position: relative;
+    animation: glitch-insert 3.5s infinite;
 }
 
 /* --- CARPETAS DESPLEGABLES --- */
