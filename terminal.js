@@ -71,7 +71,7 @@ async function toggleFolder(folderId) {
 // Subrutina para la animación de borrado de la terminal y resistencia
 async function runResistAnimation(p) {
     const prefixText = " 🔹 Contenido: ";
-    const resistQuote = "\"El ciclo no puede romperse porque ya fue escrito.\"";
+    const resistQuote = "\"El ciclo no se puede romper, porque ya fue escrito.\"";
     const fullHTML = prefixText + `<span class="glitch-resist">${resistQuote}</span>`;
     
     // Esperamos 2 segundos en lugar de 4 para que sea más inmediato tras revelarse el secreto
@@ -92,7 +92,7 @@ async function runResistAnimation(p) {
 
         // Mensaje de error de Arytza
         await new Promise(r => setTimeout(r, 200));
-        p.innerHTML = prefixText + '<span class="error-text">[ ERROR: ARCHIVO PROTEGIDO POR LA ARQUITECTA ]</span>';
+        p.innerHTML = prefixText + '<span class="error-text">[ ERROR: ERROR DE PERSISTENCIA ]</span>';
         await new Promise(r => setTimeout(r, 1200));
 
         // El mensaje de AL-3 resiste y reaparece de golpe
