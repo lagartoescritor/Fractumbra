@@ -157,7 +157,7 @@
         </div>
     </main>
 
-    <script>
+    <script src="terminal.js">
         // Base de datos de los registros a inyectar en las carpetas
         const registryData = {
             'f-activacion': [
@@ -226,59 +226,6 @@
                 "|spk|AL-3:| El ciclo no se puede romper… porque ya fue escrito."
             ]
         };
-
-        // Función para abrir o contraer la carpeta y animar la terminal
-        async function toggleFolder(folderId) {
-            const folder = document.getElementById(folderId);
-            const content = document.getElementById('c-' + folderId);
-
-            // Si ya está abierta, la cerramos
-            if (folder.classList.contains('open')) {
-                folder.classList.remove('open');
-                // Al quitar la clase, el CSS max-height se encarga de contraerla
-                return;
-            }
-
-            // Si estaba cerrada, la abrimos
-            folder.classList.add('open');
-
-            // Si es la primera vez que se abre, simulamos la escritura
-            if (!folder.dataset.loaded) {
-                folder.dataset.loaded = 'true'; // Marcamos como cargada
-                const lines = registryData[folderId];
-                
-                // Loop de escritura rápida
-                for (let i = 0; i < lines.length; i++) {
-                    let rawText = lines[i];
-                    const p = document.createElement('p');
-                    let textToType = rawText;
-
-                    // Parsear comandos de estilo personalizados que inventé arriba
-                    if (rawText.startsWith('|cls|')) {
-                        const parts = rawText.split('|'); // ["", "cls", "clase-css", " Texto..."]
-                        p.classList.add(parts[2]);
-                        textToType = parts[3];
-                    } else if (rawText.startsWith('|spk|')) {
-                        const parts = rawText.split('|'); // ["", "spk", "Speaker:", " Texto..."]
-                        const speakerSpan = document.createElement('span');
-                        speakerSpan.classList.add('dialogue-speaker');
-                        speakerSpan.innerText = parts[2] + " ";
-                        p.appendChild(speakerSpan);
-                        textToType = parts[3];
-                    }
-
-                    content.appendChild(p);
-
-                    // Escritura ultrarrápida caracter por caracter
-                    for (let j = 0; j < textToType.length; j++) {
-                        p.innerHTML += textToType.charAt(j);
-                        await new Promise(r => setTimeout(r, 5));
-                    }
-                    
-                    await new Promise(r => setTimeout(r, 40));
-                }
-            }
-        }
     </script>
 </body>
 </html>
