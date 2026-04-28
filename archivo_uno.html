@@ -155,9 +155,9 @@
         </div>
     </main>
 
-    <script src="terminal.js">
+    <script>
         // Base de datos de los registros a inyectar en las carpetas
-        const registryData = {
+        window.registryData = {
             'f-activacion': [
                 "|cls|log-title| 📂 INFORME DE ACTIVACIÓN – AL-3",
                 "|cls|log-item| 🔹 Fecha: 15 de marzo de 2030",
@@ -225,5 +225,7 @@
             ]
         };
     </script>
+
+    <script src="terminal.js"></script>
 </body>
 </html>
