@@ -195,6 +195,18 @@ header {
     animation: glitch-insert 3.5s infinite;
 }
 
+@keyframes glitch-insert {
+    0%, 88% { opacity: 1; transform: translate(0) skew(0deg); filter: blur(0); }
+    89% { opacity: 0.4; transform: translate(-4px, 2px) skew(15deg); filter: blur(2px); box-shadow: inset 0 0 15px var(--alert-color); }
+    90% { opacity: 1; color: #fff; transform: translate(4px, -2px) skew(-15deg); filter: blur(0); }
+    92% { opacity: 0; transform: translate(0) skew(0deg); }
+    94% { opacity: 1; color: var(--text-main); transform: scale(1.02); }
+    95% { color: var(--alert-color); transform: scale(1); }
+    97% { opacity: 0.2; transform: translate(2px, 0) skew(20deg); }
+    98% { opacity: 1; transform: translate(0) skew(0deg); box-shadow: none; }
+    100% { opacity: 1; transform: translate(0); }
+}
+
 /* --- CARPETAS DESPLEGABLES --- */
 .folder {
     margin: 2rem 0;
