@@ -90,7 +90,7 @@ async function runResistAnimation(p) {
         if (!p.closest('.folder').classList.contains('open')) break;
 
         await new Promise(r => setTimeout(r, 200));
-        p.innerHTML = prefixText + '<span class="error-text">[ ERROR DE PERSISTENCIA]</span>';
+        p.innerHTML = prefixText + '<span class="error-text">[ ERROR DE PERSISTENCIA ]</span>';
         await new Promise(r => setTimeout(r, 1200));
 
         // Restaura de golpe
