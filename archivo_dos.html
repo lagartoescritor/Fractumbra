@@ -160,7 +160,7 @@
         </div>
     </main>
 
-    <script>
+    <script src="terminal.js">
         // Base de datos de los registros
         const registryData = {
             'f-analisis1': [
@@ -233,68 +233,6 @@
                 "|spk|AL-3:| He registrado mi propia alteración en múltiples líneas temporales."
             ]
         };
-
-        // Función para abrir o contraer la carpeta y animar la terminal
-        async function toggleFolder(folderId) {
-            const folder = document.getElementById(folderId);
-            const content = document.getElementById('c-' + folderId);
-
-            if (folder.classList.contains('open')) {
-                folder.classList.remove('open');
-                return;
-            }
-
-            folder.classList.add('open');
-
-            if (!folder.dataset.loaded) {
-                folder.dataset.loaded = 'true'; 
-                const lines = registryData[folderId];
-                
-                for (let i = 0; i < lines.length; i++) {
-                    let rawText = lines[i];
-                    const p = document.createElement('p');
-                    let textToType = rawText;
-
-                    if (rawText.startsWith('|cls|')) {
-                        const parts = rawText.split('|'); 
-                        p.classList.add(parts[2]);
-                        textToType = parts[3];
-                    } else if (rawText.startsWith('|spk|')) {
-                        const parts = rawText.split('|'); 
-                        const speakerSpan = document.createElement('span');
-                        speakerSpan.classList.add('dialogue-speaker');
-                        speakerSpan.innerText = parts[2] + " ";
-                        p.appendChild(speakerSpan);
-                        textToType = parts[3];
-                    }
-
-                    content.appendChild(p);
-
-                    // Parche: Buffer de memoria para renderizar etiquetas HTML correctamente
-                    let currentLineHTML = ""; 
-                    
-                    for (let j = 0; j < textToType.length; j++) {
-                        if (textToType.charAt(j) === '<') {
-                            let tag = '';
-                            while (textToType.charAt(j) !== '>' && j < textToType.length) {
-                                tag += textToType.charAt(j);
-                                j++;
-                            }
-                            tag += '>';
-                            currentLineHTML += tag;
-                            p.innerHTML = currentLineHTML;
-                            continue;
-                        }
-                        
-                        currentLineHTML += textToType.charAt(j);
-                        p.innerHTML = currentLineHTML;
-                        await new Promise(r => setTimeout(r, 5));
-                    }
-                    
-                    await new Promise(r => setTimeout(r, 40));
-                }
-            }
-        }
     </script>
 </body>
 </html>
