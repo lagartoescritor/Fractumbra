@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nodo AL-3 | Desencriptando...</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Ajustes locales para centrar el mensaje en el medio de la pantalla */
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-bottom: 10vh; /* Compensa visualmente el header */
+        }
+
+        .wip-text {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            text-shadow: 0 0 5px rgba(0, 255, 204, 0.3);
+            text-align: left; /* Para que la escritura parezca de consola real */
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 12px;
+            height: 1.2rem;
+            background-color: var(--text-main);
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="path">NODO AL-3 / MEMORIA_RAIZ / SECUENCIA_INTERRUMPIDA.SYS</div>
+        <a href="index.html" class="btn-nav">[ VOLVER AL ORIGEN ]</a>
+    </header>
+
+    <main>
+        <div class="wip-text">
+            <span id="typewriter-wip"></span><span class="cursor"></span>
+        </div>
+    </main>
+
+    <script>
+        // Efecto de máquina de escribir para la página de progreso
+        const wipText = "> ADVERTENCIA: FRAGMENTOS FALTANTES.\n> DESENCRIPTANDO SIGUIENTES ARCHIVOS...\n> PÁGINA EN PROGRESO.";
+        let charIndex = 0;
+        const typeSpeed = 50;
+
+        function typeWriterWip() {
+            if (charIndex < wipText.length) {
+                const char = wipText.charAt(charIndex);
+                // Convertimos los saltos de línea de texto en saltos de línea HTML
+                if (char === '\n') {
+                    document.getElementById("typewriter-wip").innerHTML += "<br><br>";
+                } else {
+                    document.getElementById("typewriter-wip").innerHTML += char;
+                }
+                charIndex++;
+                setTimeout(typeWriterWip, typeSpeed);
+            }
+        }
+
+        // Iniciamos la animación un segundo después de cargar la página
+        window.onload = () => {
+            setTimeout(typeWriterWip, 800);
+        };
+    </script>
+</body>
+</html>
