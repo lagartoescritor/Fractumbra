@@ -181,6 +181,19 @@ header {
     100% { text-shadow: -2px 0 0px var(--alert-color), 2px 0 0px #00ffcc; opacity: 0.9; transform: translateX(-1px); }
 }
 
+/* --- ADVERTENCIA INYECTADA (ARCHIVO CERO) --- */
+.forced-warning {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    border: 2px solid var(--alert-color);
+    color: var(--alert-color);
+    background-color: rgba(255, 51, 102, 0.05);
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 0 5px rgba(255, 51, 102, 0.5);
+    animation: glitch-insert 4s infinite;
+}
+
 /* --- CARPETAS DESPLEGABLES --- */
 .folder {
     margin: 2rem 0;
