@@ -74,13 +74,14 @@ async function runResistAnimation(p) {
     const resistQuote = "\"El ciclo no puede romperse porque ya fue escrito.\"";
     const fullHTML = prefixText + `<span class="glitch-resist">${resistQuote}</span>`;
     
+    // Esperamos 2 segundos en lugar de 4 para que sea más inmediato tras revelarse el secreto
+    await new Promise(r => setTimeout(r, 2000));
+    
     while (p.closest('.folder').classList.contains('open')) {
-        // Esperamos 4 segundos
-        await new Promise(r => setTimeout(r, 4000));
         
         if (!p.closest('.folder').classList.contains('open')) break;
 
-        // Efecto backspace
+        // Efecto backspace simulando que el sistema intenta borrar el mensaje
         for (let i = resistQuote.length; i >= 0; i--) {
             if (!p.closest('.folder').classList.contains('open')) break;
             p.innerHTML = prefixText + resistQuote.substring(0, i) + '<span style="background:var(--text-main);color:var(--bg-color);">█</span>';
@@ -89,11 +90,12 @@ async function runResistAnimation(p) {
 
         if (!p.closest('.folder').classList.contains('open')) break;
 
+        // Mensaje de error de Arytza
         await new Promise(r => setTimeout(r, 200));
         p.innerHTML = prefixText + '<span class="error-text">[ ERROR: ARCHIVO PROTEGIDO POR LA ARQUITECTA ]</span>';
         await new Promise(r => setTimeout(r, 1200));
 
-        // Restaura de golpe
+        // El mensaje de AL-3 resiste y reaparece de golpe
         p.innerHTML = fullHTML;
         p.style.color = 'var(--alert-color)';
         p.style.textShadow = '0 0 10px var(--alert-color)';
@@ -107,4 +109,48 @@ async function runResistAnimation(p) {
     
     p.dataset.animating = '';
     p.innerHTML = fullHTML;
+}
+
+// NUEVO: Subrutina de anomalía para revelar una carpeta oculta usando un botón
+async function revealSecretFolder(btnElement, folderId, nextUrl) {
+    // Prevenir que el usuario cliquee dos veces seguidas
+    if (btnElement.dataset.glitching) return;
+    btnElement.dataset.glitching = 'true';
+
+    const originalText = btnElement.innerText;
+
+    // 1. Efecto visual de Glitch en el botón
+    btnElement.style.color = 'var(--alert-color)';
+    btnElement.style.borderColor = 'var(--alert-color)';
+    btnElement.style.textShadow = '0 0 8px var(--alert-color)';
+    
+    const glitchTexts = ["[ ! ] ANOMALÍA", "INTERCEPTANDO...", "[ ACCESO DENEGADO ]", "[ ARCHIVO RECUPERADO ]"];
+    for(let i = 0; i < glitchTexts.length; i++) {
+        btnElement.innerText = glitchTexts[i];
+        await new Promise(r => setTimeout(r, 300));
+    }
+
+    // 2. Revelar la carpeta oculta
+    const folder = document.getElementById(folderId);
+    folder.style.display = 'block';
+
+    // 3. Scrollear hacia la carpeta de manera suave
+    folder.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // 4. Abrirla automáticamente
+    await new Promise(r => setTimeout(r, 600));
+    toggleFolder(folderId);
+
+    // 5. Restaurar el botón original, pero ahora sí apuntando a la próxima URL
+    await new Promise(r => setTimeout(r, 1500));
+    btnElement.style.color = '';
+    btnElement.style.borderColor = '';
+    btnElement.style.textShadow = '';
+    btnElement.innerText = originalText;
+    
+    // Le quitamos el script de glitch y le ponemos el enlace real
+    btnElement.onclick = null;
+    if (nextUrl) {
+        btnElement.href = nextUrl;
+    }
 }
