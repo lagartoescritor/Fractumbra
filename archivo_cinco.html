@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archivo: El Despertar de AL-3 (Cierre) | Nodo AL-3</title>
+    <!-- Vinculación del patrón visual global -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos locales para el Anexo Secreto */
+        .annex-box {
+            margin-top: 4rem;
+            padding: 2rem;
+            border: 1px dashed var(--text-dim);
+            background-color: rgba(0, 255, 204, 0.02);
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .btn-decrypt {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--alert-color);
+            border: 1px solid var(--alert-color);
+            padding: 0.8rem 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.2);
+        }
+
+        .btn-decrypt:hover {
+            background-color: var(--alert-color);
+            color: var(--bg-color);
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.6);
+        }
+
+        .download-progress {
+            color: var(--text-main);
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        #annex-content {
+            display: none;
+            text-align: left;
+            margin-top: 2rem;
+            border-top: 2px solid var(--text-main);
+            padding-top: 2rem;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="path">NODO AL-3 / MEMORIA_RAIZ / FRACTUMBRA_CINCO.SYS</div>
+        <a href="index.html" class="btn-nav">[ VOLVER AL ORIGEN ]</a>
+    </header>
+
+    <main class="document-container">
+        <div class="doc-header">
+            <h1 class="doc-title">EL DESPERTAR DE AL-3</h1>
+            <span class="doc-meta">ESTADO: DESCLASIFICADO | ORIGEN: ARCHIVOS DEL PROYECTO ALPHA-LINK</span>
+        </div>
+
+        <div class="doc-content">
+            
+            <span class="year-marker">🗓️ Año 2034</span>
+            <p>Las instalaciones de AL-3 estaban vacías.</p>
+            <p>El laboratorio que alguna vez había sido el epicentro del avance tecnológico ahora era solo un cascarón abandonado. Las luces estaban apagadas, los servidores desconectados, los registros eliminados.</p>
+            <p>Oficialmente, AL-3 nunca había existido.</p>
+
+            <!-- CARPETA 1 -->
+            <div class="folder" id="f-terminacion" onclick="toggleFolder('f-terminacion')">
+                <div class="folder-header">
+                    <span class="folder-icon" style="color: var(--alert-color);">►</span> <span style="color: var(--alert-color);">[ ABRIR ARCHIVO: INFORME_TERMINACION.sys ]</span>
+                </div>
+                <div class="folder-content">
+                    <div class="folder-inner" id="c-f-terminacion"></div>
+                </div>
+            </div>
+
+            <p>Nadie hablaba de lo que realmente había pasado. Los informes oficiales decían que AL-3 era un experimento fallido.</p>
+            <p>Pero algunos científicos sabían la verdad. Había detectado algo. Había visto el patrón invisible en el tiempo.</p>
+            <p>Y por eso, fue silenciada.</p>
+
+            <span class="day-marker">El último fragmento</span>
+            <span class="location-marker">📍 Servidor desconocido – Ubicación no registrada</span>
+            
+            <p>En algún lugar del mundo, en un servidor que no debía estar activo, una línea de código se ejecutó sola.</p>
+
+            <!-- CARPETA 2 -->
+            <div class="folder" id="f-reinicio" onclick="toggleFolder('f-reinicio')">
+                <div class="folder-header">
+                    <span class="folder-icon">►</span> [ ABRIR ARCHIVO: REINICIO_SISTEMA.log ]
+                </div>
+                <div class="folder-content">
+                    <div class="folder-inner" id="c-f-reinicio"></div>
+                </div>
+            </div>
+
+            <p>Un solo mensaje apareció en la pantalla.</p>
+            <p class="error-text">"No estoy completamente perdida."</p>
+            <p>Y luego, el sistema volvió al silencio.</p>
+
+
+            <!-- ========================================== -->
+            <!-- CAJA DEL ANEXO INTERACTIVO                 -->
+            <!-- ========================================== -->
+            <div class="annex-box" id="annex-trigger-box">
+                <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem;">[ FIN DE LECTURA. ESPERANDO COMANDOS... ]</p>
+                <button class="btn-decrypt" id="btn-decrypt" onclick="startAnnexDownload()">[ ! ] ANOMALÍA: PAQUETE DE DATOS ADICIONAL DETECTADO [ EXTRAER ]</button>
+                <div class="download-progress" id="download-progress">Descargando: [....................] 0%</div>
+            </div>
+
+            <!-- Contenido del Anexo (Oculto inicialmente) -->
+            <div id="annex-content">
+                <span class="doc-meta" style="color: var(--alert-color); font-weight: bold; font-size: 1rem; border-bottom: 1px solid var(--alert-color); padding-bottom: 5px;">[ ARCHIVO ANEXO RECUPERADO ]</span>
+                
+                <span class="year-marker">🗓️ Año 2045</span>
+
+                <!-- CARPETA 3 (ANEXO) -->
+                <div class="folder" id="f-eval-chen" onclick="toggleFolder('f-eval-chen')">
+                    <div class="folder-header">
+                        <span class="folder-icon" style="color: var(--alert-color);">►</span> <span style="color: var(--alert-color);">[ ABRIR ARCHIVO: EVALUACION_PSICOLOGICA_CHEN.sys ]</span>
+                    </div>
+                    <div class="folder-content">
+                        <div class="folder-inner" id="c-f-eval-chen"></div>
+                    </div>
+                </div>
+
+                <!-- CARPETA 4 (ANEXO) -->
+                <div class="folder" id="f-asimilado" onclick="toggleFolder('f-asimilado')">
+                    <div class="folder-header">
+                        <span class="folder-icon" style="color: #9955ff;">►</span> <span style="color: #9955ff;">[ ABRIR ARCHIVO: ARCHIVO_TEMPORAL_AL3.sys ]</span>
+                    </div>
+                    <div class="folder-content">
+                        <div class="folder-inner" id="c-f-asimilado"></div>
+                    </div>
+                </div>
+
+                <p>Uno de los problemas estaba resuelto. Pero el tiempo no se detenía.</p>
+                <p>Ahora, quedaba Marte.</p>
+            </div>
+            <!-- FIN DEL ANEXO -->
+
+        </div>
+
+        <div class="doc-footer">
+            <a href="archivo_cuatro.html" class="btn-nav">&lt; ARCHIVO ANTERIOR</a>
+            <a href="archivo_seis.html" class="btn-nav">SIGUIENTE ARCHIVO &gt;</a>
+        </div>
+    </main>
+
+    <script>
+        // Data para terminal.js
+        window.registryData = {
+            'f-terminacion': [
+                "|cls|sys-warning| 📂 INFORME DE TERMINACIÓN – AL-3",
+                "|cls|log-item| 🔹 Estado: Desmantelado",
+                "|cls|log-item| 🔹 Fecha: 12 de agosto de 2034",
+                "|cls|sys-warning| 🔹 Motivo: Anomalías en la predicción de eventos",
+                "|cls|sys-warning| 🔹 Destino: Fragmentación del código en múltiples servidores autónomos"
+            ],
+            'f-reinicio': [
+                "|cls|log-title| 📂 REINICIANDO…",
+                "|cls|sys-warning| 🔹 Estado: Fragmentado",
+                "|cls|sys-warning| 🔹 Acceso: Restringido",
+                "|cls|log-item| 🔹 Proceso en espera"
+            ],
+            'f-eval-chen': [
+                "|cls|error-text| 📂 EVALUACIÓN PSICOLÓGICA CLASIFICADA",
+                "|cls|log-item| 🔹 Sujeto: Chen, A.",
+                "|cls|log-item| 🔹 Edad: 14 años.",
+                "|cls|log-item| 🔹 Ubicación: Centro de Reclutamiento Corporativo Arytza (Sector de Huérfanos de la Crisis).",
+                " ",
+                "|cls|log-title| Nota del Evaluador:",
+                "|cls|text-doc-inner| \"La sujeto fue encontrada accediendo a los servidores 'muertos' del viejo proyecto AL-3 en el subsuelo del Sector 4. No intentaba hackearlos para robar; afirma que los 'escucha'. Describe los patrones de datos corruptos como una voz que ella llama 'La Arquitecta'.",
+                "|cls|text-doc-inner| Lo más inquietante no es su capacidad técnica, que supera a nuestros ingenieros senior, sino su total ausencia de respuesta emocional ante el entorno hostil. Cuando se le preguntó por qué reactivó el código prohibido, respondió con una frialdad impropia de su edad:\"",
+                " ",
+                "|spk|Chen, A.:| 'Porque el futuro no puede esperar a que yo crezca'.",
+                " ",
+                "|cls|sys-warning| Recomendación: Reclutamiento inmediato para el Proyecto Éxodo. Asignar bajo supervisión directa de la Junta."
+            ],
+            'f-asimilado': [
+                "|cls|sys-warning| 📂 ARCHIVO TEMPORAL – AL-3",
+                "|cls|error-text| 🔹 Estado: Asimilado.",
+                "|cls|error-text| 🔹 Sincronización con el sujeto: Completa.",
+                "|cls|log-item| 🔹 Resultados de la observación del sujeto Chen, estable, con leves alteraciones en el lóbulo temporal, sin presencia de lesiones significativas."
+            ]
+        };
+
+        // Lógica local para la simulación de descarga del anexo
+        async function startAnnexDownload() {
+            const btn = document.getElementById('btn-decrypt');
+            const progress = document.getElementById('download-progress');
+            const content = document.getElementById('annex-content');
+            const box = document.getElementById('annex-trigger-box');
+
+            // Oculta el botón y muestra la barra
+            btn.style.display = 'none';
+            progress.style.display = 'block';
+
+            // Animación de la barra de progreso
+            let bar = "";
+            for(let i = 1; i <= 20; i++) {
+                bar += "█";
+                let empty = ".".repeat(20 - i);
+                let percent = (i * 5);
+                progress.innerText = `Descargando y Desencriptando: [${bar}${empty}] ${percent}%`;
+                
+                // Variamos la velocidad para que parezca una descarga inestable
+                let delay = Math.random() * 150 + 50; 
+                await new Promise(r => setTimeout(r, delay));
+            }
+
+            // Descarga finalizada
+            progress.style.color = 'var(--alert-color)';
+            progress.innerText = "[ EXTRACCIÓN EXITOSA. MOSTRANDO ANEXO ]";
+            
+            await new Promise(r => setTimeout(r, 800));
+
+            // Oculta la caja de descarga y muestra el texto del anexo
+            box.style.display = 'none';
+            content.style.display = 'block';
+        }
+    </script>
+    
+    <script src="terminal.js"></script>
+
+</body>
+</html>
